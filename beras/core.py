@@ -73,7 +73,6 @@ class Weighted(ABC):
         """Collects all trainable variables in the module"""
 
         return [var for var in self.weights if var.trainable]
-
     @property
     def non_trainable_variables(self) -> list[Tensor]:
         """Collects all non-trainable variables in the module"""
@@ -87,8 +86,7 @@ class Weighted(ABC):
     @trainable.setter
     def trainable(self, trainable: bool):
         """Sets the trainable status of all weights to trainable"""
-        for var in self.weights:
-            var.trainable = trainable
+        [setattr(var, 'trainable', trainable) for var in self.weights] 
 
 class Diffable(Callable, Weighted):
     """
