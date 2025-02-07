@@ -18,18 +18,21 @@ class LeakyReLU(Activation):
 
     def __init__(self, alpha=0.3):
         self.alpha = alpha
+        self.input = None
 
     def forward(self, x) -> Tensor:
         """Leaky ReLu forward propagation!"""
-        return NotImplementedError
-
+        self.input = x
+        relu = x if x > 0 else self.alpha * x
+        return relu
     def get_input_gradients(self) -> list[Tensor]:
         """
         Leaky ReLu backpropagation!
         To see what methods/variables you have access to, refer to the cheat sheet.
         Hint: Make sure not to mutate any instance variables. Return a new list[tensor(s)]
         """
-        raise NotImplementedError
+        gradient = 1 if self.input > 0 else self.alpha
+        return gradient
 
     def compose_input_gradients(self, J):
         return self.get_input_gradients()[0] * J
