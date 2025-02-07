@@ -9,6 +9,7 @@ class Dense(Diffable):
 
     def __init__(self, input_size, output_size, initializer: DENSE_INITIALIZERS = "normal"):
         self.w, self.b = self._initialize_weight(initializer, input_size, output_size)
+        self.input = None 
 
     @property
     def weights(self) -> list[Tensor]:
@@ -18,12 +19,15 @@ class Dense(Diffable):
         """
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
-        return NotImplementedError
+        self.input = x
+        return Tensor(np.matmul(self.w, x) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
-        return NotImplementedError
+        return list[Tensor(self.w.T)]
 
     def get_weight_gradients(self) -> list[Tensor]:
+        w_gradient = list[Tensor(self.input.T)]
+        b_gradient = list[Tensor[{np.ones(self.input.shape[0])}]]
         return NotImplementedError
 
     @staticmethod
@@ -44,7 +48,8 @@ class Dense(Diffable):
             - Kaiming: Similar purpose as Xavier initialization. Typically works better for layers
             with ReLU activation.
         """
-
+        weight = None
+        bias = None 
         initializer = initializer.lower()
         assert initializer in (
             "zero",
@@ -52,5 +57,16 @@ class Dense(Diffable):
             "xavier",
             "kaiming",
         ), f"Unknown dense weight initialization strategy '{initializer}' requested"
-
-        return None, None
+        if(initializer == "zero"):
+            weight = Variable(np.zeros((output_size, input_size)))
+            bias = Variable(np.zeros((output_size, 1)))
+        elif(initializer == "normal"):
+            weight = Variable(np.random.normal(0, 1, (output_size, input_size)))
+            bias = Variable(np.zeros((output_size, 1)))
+        elif(initializer == "xavier"):
+            weight = Variable(np.random.normal(0, np.sqrt(2/(input_size + output_size)), (output_size, input_size)))
+            bias = Variable(np.zeros((output_size, 1)))
+        elif(initializer == "kaiming"):
+            weight = Variable(np.random.normal(0, np.sqrt(2/input_size), (output_size, input_size)))
+            bias = Variable(np.zeros((output_size, 1)))
+        return weight, bias
