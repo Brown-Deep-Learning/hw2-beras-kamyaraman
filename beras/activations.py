@@ -29,7 +29,7 @@ class LeakyReLU(Activation):
         To see what methods/variables you have access to, refer to the cheat sheet.
         Hint: Make sure not to mutate any instance variables. Return a new list[tensor(s)]
         """
-        gradient = [1 if i > 0 else self.alpha for i in self.inputs[0]]
+        gradient = np.where(self.inputs[0] > 0, 1, self.alpha) 
         return [Tensor(gradient)]
 
     def compose_input_gradients(self, J):
