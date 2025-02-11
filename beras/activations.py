@@ -14,8 +14,6 @@ class Activation(Diffable):
 
 class LeakyReLU(Activation):
 
-    ## TODO: Implement for default intermediate activation.
-
     def __init__(self, alpha=0.3):
         self.alpha = alpha
 
@@ -45,8 +43,6 @@ class ReLU(LeakyReLU):
 ## Output Activations For Probability-Space Outputs
 
 class Sigmoid(Activation):
-    
-    ## TODO: Implement for default output activation to bind output to 0-1
 
     def forward(self, x) -> Tensor:
 
@@ -74,9 +70,11 @@ class Softmax(Activation):
         self.inputs = x
         """Softmax forward propagation!"""
         ## stable version
-        stable = x - np.max(x)
+        #dealing with case of x being a single vector
+        axis = 1 if len(x.shape) > 1 else 0
+        stable = x - np.max(x, axis = axis, keepdims = True)
         exps = np.exp(stable)
-        outs = exps/np.sum(exps)
+        outs = exps/np.sum(exps, axis = axis)
         return Tensor(outs)
  
 
