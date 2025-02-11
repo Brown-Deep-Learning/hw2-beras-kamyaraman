@@ -15,11 +15,21 @@ class Loss(Diffable):
 
 
 class MeanSquaredError(Loss):
+    def __init__(self):
+        self.y_pred = None
+        self.y_true = None
+
     def forward(self, y_pred: Tensor, y_true: Tensor) -> Tensor:
-        return NotImplementedError
+        self.y_pred = y_pred
+        self.y_true = y_true
+        means = np.mean((y_pred - y_true) ** 2, axis=0)
+        return np.mean(means)
 
     def get_input_gradients(self) -> list[Tensor]:
-        return NotImplementedError
+        y_pred_gradient = [2 * (self.y_pred - self.y_true)]
+        y_true_gradient = [0] 
+        return y_pred_gradient, y_true_gradient
+
 
 class CategoricalCrossEntropy(Loss):
 
