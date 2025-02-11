@@ -21,7 +21,8 @@ class Dense(Diffable):
         """
         print(self.w.shape)
         print(x.shape)
-        fwd = np.matmul(self.w, x.T) + self.b
+        print(self.b.shape)
+        fwd = np.matmul(self.w, x) + self.b
         return Tensor(fwd)
 
     def get_input_gradients(self) -> list[Tensor]:

@@ -73,17 +73,18 @@ class Softmax(Activation):
     def forward(self, x):
         self.inputs = x
         """Softmax forward propagation!"""
-        ## Not stable version
-        exps = np.exp(x) - np.max(x, axis=-1, keepdims=True)
-        outs = exps / np.sum(exps, axis=-1, keepdims=True)
-        self.outputs = outs
-        ## HINT: Use stable softmax, which subtracts maximum from
-        ## all entries to prevent overflow/underflow issues
+        ## stable version
+        stable = x - np.max(x)
+        exps = np.exp(stable)
+        outs = exps/np.sum(exps)
         return Tensor(outs)
+ 
 
     def get_input_gradients(self):
         """Softmax input gradients! Using np.outer and np.fill_diagonal is helpful."""
         x, y = self.inputs + self.outputs
+        if(len(x.shape) == 1):
+            x = x.reshape(1, -1)
         bn, n = x.shape
         grad = np.zeros(shape=(bn, n, n), dtype=x.dtype)
         np.outer(-y, x, out=grad)
