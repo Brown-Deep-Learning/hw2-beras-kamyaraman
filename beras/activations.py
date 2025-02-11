@@ -23,7 +23,7 @@ class LeakyReLU(Activation):
         """Leaky ReLu forward propagation!"""
         relu = [i if i > 0 else self.alpha * i for i in x]
 
-        return relu
+        return Tensor(relu)
     def get_input_gradients(self) -> list[Tensor]:
         """
         Leaky ReLu backpropagation!
@@ -31,7 +31,7 @@ class LeakyReLU(Activation):
         Hint: Make sure not to mutate any instance variables. Return a new list[tensor(s)]
         """
         gradient = [1 if i > 0 else self.alpha for i in self.inputs[0]]
-        return gradient
+        return [Tensor(gradient)]
 
     def compose_input_gradients(self, J):
         return self.get_input_gradients()[0] * J
@@ -75,7 +75,7 @@ class Softmax(Activation):
         self.inputs = x
         """Softmax forward propagation!"""
         ## Not stable version
-        exps = np.exp(input) - np.max(input, axis=-1, keepdims=True)
+        exps = np.exp(x) - np.max(x, axis=-1, keepdims=True)
         outs = exps / np.sum(exps, axis=-1, keepdims=True)
         self.outputs = outs
         ## HINT: Use stable softmax, which subtracts maximum from
