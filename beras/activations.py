@@ -80,7 +80,8 @@ class Softmax(Activation):
     def get_input_gradients(self):
         """Softmax input gradients! Using np.outer and np.fill_diagonal is helpful."""
         x, y = self.inputs + self.outputs
-        bn, n = x.shape
+        print(x.shape)
+        bn, n = x.shape 
         grad = np.zeros(shape=(bn, n, n), dtype=x.dtype)
         for i in range(bn):
             grad[i] = np.outer(y[i], y[i])

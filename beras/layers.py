@@ -18,11 +18,10 @@ class Dense(Diffable):
         """
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
-        assert x.shape[0] == self.w.shape[1], f"Input size {x.shape[0]} does not match weight size {self.w.shape[1]}"
         print(self.w.shape)
         print(x.shape)
         print(self.b.shape)
-        fwd = np.dot(x, self.w) + self.b
+        fwd = np.dot(self.w, x) + self.b
         print(fwd.shape)
         return Tensor(fwd)
 
