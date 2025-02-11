@@ -67,7 +67,6 @@ class Softmax(Activation):
         self.gradients = None
 
     def forward(self, x):
-        self.inputs = x
         """Softmax forward propagation!"""
         ## stable version
         #dealing with case of x being a single vector
@@ -75,17 +74,15 @@ class Softmax(Activation):
         stable = x - np.max(x, axis = axis, keepdims = True)
         exps = np.exp(stable)
         outs = exps/np.sum(exps, axis = axis, keepdims = True)
-        print(outs.shape)
         return Tensor(outs)
  
 
     def get_input_gradients(self):
         """Softmax input gradients! Using np.outer and np.fill_diagonal is helpful."""
-        x, y = self.inputs + self.outputs
-        if(len(x.shape) == 1):
-            x = x.reshape(1, -1)
+        x, y = self.inputs, self.outputs
         bn, n = x.shape
         grad = np.zeros(shape=(bn, n, n), dtype=x.dtype)
-        np.outer(-y, x, out=grad)
-        np.fill_diagonal(grad, y * (1 - y))
+        for i in range(bn):
+            grad[i] = np.outer(y[i], y[i])
+            np.fill_diagonal(grad[i], y[i] * (1 - y[i]))
         return [Tensor(grad)]
