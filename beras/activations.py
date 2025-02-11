@@ -74,7 +74,8 @@ class Softmax(Activation):
         axis = 1 if len(x.shape) > 1 else 0
         stable = x - np.max(x, axis = axis, keepdims = True)
         exps = np.exp(stable)
-        outs = exps/np.sum(exps, axis = axis)
+        outs = exps/np.sum(exps, axis = axis, keepdims = True)
+        print(outs.shape)
         return Tensor(outs)
  
 

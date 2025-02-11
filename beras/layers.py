@@ -21,7 +21,7 @@ class Dense(Diffable):
         print(self.w.shape)
         print(x.shape)
         print(self.b.shape)
-        fwd = np.matmul(self.w, x) + self.b
+        fwd = np.dot(self.w, x) + self.b
         print(fwd.shape)
         return Tensor(fwd)
 
