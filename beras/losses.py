@@ -21,7 +21,6 @@ class MeanSquaredError(Loss):
         return Tensor(total)
 
     def get_input_gradients(self) -> list[Tensor]:
-        #TODO maybe this is wrong idk 
         y_pred_gradient = (2 * (self.inputs[0] - self.inputs[1])) / np.prod(self.inputs[0].shape)
         y_true_gradient = np.zeros(self.inputs[1].shape) 
         return [Tensor(y_pred_gradient), Tensor(y_true_gradient)]
@@ -31,8 +30,11 @@ class CategoricalCrossEntropy(Loss):
 
     def forward(self, y_pred, y_true):
         """Categorical cross entropy forward pass!"""
-        return NotImplementedError
+        y_pred = np.clip(y_pred, 1e-7, 1- 1e-7)
+        cross_entropy = -np.sum(y_true * np.log(y_pred))
+        return Tensor(cross_entropy)
 
     def get_input_gradients(self):
         """Categorical cross entropy input gradient method!"""
-        return NotImplementedError
+        y_pred, y_true = self.inputs
+        return [Tensor(-y_true / y_pred), Tensor(np.log(y_pred))]
