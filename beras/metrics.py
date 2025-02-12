@@ -10,4 +10,4 @@ class CategoricalAccuracy(Callable):
         ## HINT: Argmax + boolean mask via '=='
         prediction = np.argmax(probs, axis=1)
         truth = np.argmax(labels, axis=1)
-        return prediction == truth
+        return np.mean(prediction == truth)

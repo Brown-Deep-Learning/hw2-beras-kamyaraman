@@ -12,7 +12,7 @@ class Dense(Diffable):
 
     @property
     def weights(self) -> list[Tensor]:
-        return self.w, self.b
+        return [self.w, self.b]
 
     def forward(self, x: Tensor) -> Tensor:
         """
@@ -21,12 +21,14 @@ class Dense(Diffable):
         return Tensor(np.matmul(self.w, x) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
-        return Tensor(self.w.T)
+        return NotImplementedError
+        #return [Tensor(self.w.T)]
 
     def get_weight_gradients(self) -> list[Tensor]:
         w_gradient = Tensor(self.inputs[0].T)
         b_gradient = Tensor(np.ones((self.b.shape[0], 1)))
-        return w_gradient, b_gradient
+        return NotImplementedError
+        #return [w_gradient, b_gradient]
     
     @staticmethod
     def _initialize_weight(initializer, input_size, output_size) -> tuple[Variable, Variable]:
