@@ -18,12 +18,8 @@ class Dense(Diffable):
         """
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
-        try:
-            print(x.shape, self.w.shape, self.b.shape)
-            print(self.w @ x)
-            print((self.w @ x) + self.b)
-        except: 
-            print("error")
+        print(x.shape, self.w.shape, self.b.shape)
+        print(((self.w @ x) + self.b).shape)
         return Tensor((self.w @ x) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
