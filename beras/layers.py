@@ -20,11 +20,11 @@ class Dense(Diffable):
         """
         try:
             print(x.shape, self.w.shape, self.b.shape)
-            print(x @ self.w)
-            print((x @ self.w) + self.b)
+            print(self.w @ x)
+            print((self.w @ x) + self.b)
         except: 
             print("error")
-        return Tensor((x @ self.w) + self.b)
+        return Tensor((self.w @ x) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
         return Tensor(self.w.T),
