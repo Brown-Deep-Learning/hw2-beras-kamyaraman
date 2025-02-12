@@ -84,6 +84,6 @@ class Softmax(Activation):
         bn, n = x.shape 
         grad = np.zeros(shape=(bn, n, n), dtype=x.dtype)
         for i in range(bn):
-            grad[i] = np.outer(y[i], y[i])
+            grad[i] = -np.outer(y[i], y[i])
             np.fill_diagonal(grad[i], y[i] * (1 - y[i]))
         return [Tensor(grad)]
