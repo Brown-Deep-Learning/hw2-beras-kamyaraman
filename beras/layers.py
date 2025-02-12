@@ -22,12 +22,12 @@ class Dense(Diffable):
         return Tensor(fwd)
 
     def get_input_gradients(self) -> list[Tensor]:
-        return list[Tensor(self.w.T)]
+        return [Tensor(self.w.T)]
 
     def get_weight_gradients(self) -> list[Tensor]:
         w_gradient = Tensor(self.inputs[0].T)
         b_gradient = Tensor(np.ones((self.b.shape[0], 1)))
-        return list[w_gradient, b_gradient]
+        return [w_gradient, b_gradient]
     @staticmethod
     def _initialize_weight(initializer, input_size, output_size) -> tuple[Variable, Variable]:
         """
