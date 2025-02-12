@@ -12,13 +12,14 @@ class Dense(Diffable):
 
     @property
     def weights(self) -> list[Tensor]:
-        return [self.w, self.b]
+        return self.w, self.b
 
     def forward(self, x: Tensor) -> Tensor:
         """
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
-        return np.matmul(x, self.w) + self.b
+
+        return Tensor(np.matmul(x, self.w) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
         return NotImplementedError
