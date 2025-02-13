@@ -12,20 +12,20 @@ class Dense(Diffable):
 
     @property
     def weights(self) -> list[Tensor]:
-        return self.w, self.b
+        return [self.w, self.b]
 
     def forward(self, x: Tensor) -> Tensor:
         """
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
-        return Tensor((np.matmul(x, self.w)) + self.b)
+        return np.matmul(x, self.w) + self.b
 
     def get_input_gradients(self) -> list[Tensor]:
-        return [np.matmul(self.inputs[0], self.w.T)]
+        return [np.matmul(self.inputs, self.w.T)]
 
     def get_weight_gradients(self) -> list[Tensor]:
-        w_gradient = np.matmul(self.inputs[0].T, np.ones((self.inputs[0].shape[0], self.w.shape[0])))
-        b_gradient = Tensor(np.ones((1, self.inputs[0].shape[0])))
+        w_gradient = np.matmul(self.inputs.T, np.ones((self.inputs.shape[0], self.w.shape[0])))
+        b_gradient = Tensor(np.ones((1, self.inputs.shape[0])))
         return [w_gradient, b_gradient]
     
     @staticmethod
