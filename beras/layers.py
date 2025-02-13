@@ -18,8 +18,6 @@ class Dense(Diffable):
         """
         Forward pass for a dense layer! Refer to lecture slides for how this is computed.
         """
-        print(x.shape, self.w.shape, self.b.shape)
-        print(((np.matmul(x, self.w)) + self.b).shape)
         return Tensor((np.matmul(x, self.w)) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
