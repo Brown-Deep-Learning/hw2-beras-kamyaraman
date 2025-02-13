@@ -27,8 +27,8 @@ class Dense(Diffable):
         print(self.inputs[0].shape)
         print(self.w.shape)
         print(self.b.shape)
-        w_gradient = np.matmul(self.inputs[0].T, np.ones(np.expand_dims(self.w, axis=1).shape))
-        b_gradient = Tensor(np.ones(self.b.shape))
+        w_gradient = np.matmul(np.expand_dims(self.inputs[0], axis=-1), np.ones(np.expand_dims(self.w, axis=1).shape))
+        b_gradient = np.ones(self.b.shape)
         return [w_gradient, b_gradient]
     
     @staticmethod
@@ -60,14 +60,11 @@ class Dense(Diffable):
         ), f"Unknown dense weight initialization strategy '{initializer}' requested"
         if(initializer == "zero"):
             weight = Variable(np.zeros((input_size, output_size)))
-            bias = Variable(np.zeros((1, output_size)))
         elif(initializer == "normal"):
             weight = Variable(np.random.normal(0, 1, (input_size, output_size)))
-            bias = Variable(np.zeros((1, output_size)))
         elif(initializer == "xavier"):
             weight = Variable(np.random.normal(0, np.sqrt(2/(input_size + output_size)), (input_size, output_size)))
-            bias = Variable(np.zeros((1, output_size)))
         elif(initializer == "kaiming"):
             weight = Variable(np.random.normal(0, np.sqrt(2/input_size), (input_size, output_size)))
-            bias = Variable(np.zeros((1, output_size)))
+        bias = Variable(np.zeros((1, output_size)))
         return weight, bias
