@@ -37,6 +37,7 @@ class GradientTape:
         # Use id(tensor) to get the object id of a tensor object.
         # in the end, your grads dictionary should have the following structure:
         # {id(tensor): [gradient]}
+       
 
         # What tensor and what gradient is for you to implement!
         # compose_input_gradients and compose_weight_gradients are methods that will be helpful
