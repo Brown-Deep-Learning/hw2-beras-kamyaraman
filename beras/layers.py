@@ -23,12 +23,12 @@ class Dense(Diffable):
         return Tensor((self.w @ x) + self.b)
 
     def get_input_gradients(self) -> list[Tensor]:
-        return Tensor(self.w.T),
+        return [Tensor(self.w.T)]
 
     def get_weight_gradients(self) -> list[Tensor]:
         w_gradient = Tensor(self.inputs[0].T)
         b_gradient = Tensor(np.ones((self.b.shape[0], 1)))
-        return w_gradient, b_gradient
+        return [w_gradient, b_gradient]
     
     @staticmethod
     def _initialize_weight(initializer, input_size, output_size) -> tuple[Variable, Variable]:
@@ -58,15 +58,15 @@ class Dense(Diffable):
             "kaiming",
         ), f"Unknown dense weight initialization strategy '{initializer}' requested"
         if(initializer == "zero"):
-            weight = Variable(np.zeros((output_size, input_size)))
-            bias = Variable(np.zeros((output_size, 1)))
+            weight = Variable(np.zeros((input_size, output_size)))
+            bias = Variable(np.zeros((1, output_size)))
         elif(initializer == "normal"):
-            weight = Variable(np.random.normal(0, 1, (output_size, input_size)))
-            bias = Variable(np.zeros((output_size, 1)))
+            weight = Variable(np.random.normal(0, 1, (input_size, output_size)))
+            bias = Variable(np.zeros((1, output_size)))
         elif(initializer == "xavier"):
-            weight = Variable(np.random.normal(0, np.sqrt(2/(input_size + output_size)), (output_size, input_size)))
-            bias = Variable(np.zeros((output_size, 1)))
+            weight = Variable(np.random.normal(0, np.sqrt(2/(input_size + output_size)), (input_size, output_size)))
+            bias = Variable(np.zeros((1, output_size)))
         elif(initializer == "kaiming"):
-            weight = Variable(np.random.normal(0, np.sqrt(2/input_size), (output_size, input_size)))
-            bias = Variable(np.zeros((output_size, 1)))
+            weight = Variable(np.random.normal(0, np.sqrt(2/input_size), (input_size, output_size)))
+            bias = Variable(np.zeros((1, output_size)))
         return weight, bias
